@@ -3,27 +3,29 @@
 
   trait AppUserAuthentication 
   {
-    public string $login;
-    public string $password;
+    private string $appLogin = 'app_user';
+    private string $appPassword = 'app_password';
 
-    public function authenticate(string $login, string $password) {
-      $this->login = $login;
-      $this->password = $password;
-
-      echo "Вы авторизовались как пользователь приложения." . PHP_EOL;
+    public function authenticate(string $login, string $password): bool {
+      if ($this->appLogin === $login && $this->appPassword === $password) {
+        echo "Вы авторизовались как пользователь приложения." . PHP_EOL;
+        return true;
+      }
+      return false;
     }
   }
 
   trait MobileUserAuthentication 
   {
-    public string $login;
-    public string $password;
+    private string $mobileLogin = 'mobile_user';
+    private string $mobilePassword = 'mobile_password';
 
-    public function authenticate(string $login, string $password) {
-      $this->login = $login;
-      $this->password = $password;
-      
-      echo "Вы авторизовались как пользователь мобильного приложения." . PHP_EOL;
+    public function authenticate(string $login, string $password): bool {
+      if  ($this->mobileLogin === $login && $this->mobilePassword === $password) {
+        echo "Вы авторизовались как пользователь мобильного приложения." . PHP_EOL;
+        return true;
+      }
+      return false;
     }
   }
 
@@ -34,28 +36,14 @@
       MobileUserAuthentication::authenticate as authenticateMobile;
     }
 
-    private $traitChoice;
-
-    public function __construct($traitChoice) {
-      $this->traitChoice = $traitChoice;
-    }
-
-    public function authenticate(string $login, $password) {
-      if ($this->traitChoice === 'app') {
-        $this->authenticateApp($login, $password); 
-      } elseif ($this->traitChoice === 'mobile') {
-        $this->authenticateMobile($login, $password);
-      } else {
-        echo "Выбран неверный трейт." . PHP_EOL;
+    public function authenticate(string $login, string $password): bool {
+      if ($this->authenticateApp($login, $password)) {
+        return true;
       }
-    } 
+      return $this->authenticateMobile($login, $password);
+    }
   }
 
-  $user = new User('app'); 
+  $user = new User(); 
   $user->authenticate('app_user', 'app_password'); 
-
-  $user = new User('mobile');
   $user->authenticate('mobile_user', 'mobile_password'); 
-
-  $user = new User('site');
-  $user->authenticate('site_user', 'site_password'); 

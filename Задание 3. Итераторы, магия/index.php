@@ -26,11 +26,12 @@
   echo $serializedStudent1 . PHP_EOL;
 
   // замена значения в строке
-  $replaceString = str_replace('Иван', 'Алексей', $serializedStudent1);
+  $replaceString = str_replace('Иван', 'Марк', $serializedStudent1);
+
   echo $replaceString . PHP_EOL;
 
   // десериализация объекта
-  $unserializedStudent1 = unserialize($serializedStudent1);
+  $unserializedStudent1 = unserialize($replaceString);
   echo $unserializedStudent1->name . PHP_EOL;
   echo $unserializedStudent1->surname . PHP_EOL;
   echo $unserializedStudent1->age . PHP_EOL;
